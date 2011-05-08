@@ -8,22 +8,24 @@
 class Thing {
 public:
   Thing();
-  void Load(const char *n, int birthY, int spouse, char* i);
+  Thing* Load(const Person p, Thing *ptr, char flag, int level);
   
   Thing *parent, **youngest;
-  char *name;
+  char name[85];
   int birth;
   int spouseCount;
-  char* id;
+  char id[30];
+  bool check;
+  int child;
 };
-
+/*
 class Data {
 public:
   Data();
   void insert(Person people);
   
   Thing data[76980];
-};
+};*/
 
 
 class Royals {
@@ -38,7 +40,9 @@ public:
   int getMarriages(const char*name, int birthYear);
   int getSiblings(const char*name, int birthYear);
 
-  Data data;
+  Thing *data[76980];
+  bool check[76980];
+  Thing top[16];
   
   
 };

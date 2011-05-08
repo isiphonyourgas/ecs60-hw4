@@ -112,17 +112,20 @@ int main(int argc, char** argv)
   {
     switch(questions[i].type)
     {
-      case 'c':
+/*      case 'c':
         answer = royals->getChildren(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
-/*          cout << "Question #" << i << " your answer: " << answer 
-              << " correct: " << questions[i].answer << endl;*/
-        break;
+          cout << "Question #" << i << " your answer: " << answer 
+              << " correct: " << questions[i].answer << endl;
+        break;*/
       case 'm':
         answer = royals->getMarriages(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
-/*          cout << "Question #" << i << " your answer: " << answer 
-              << " correct: " << questions[i].answer << endl;*/
+        {
+          cout << "Question #" << i << " your answer: " << answer 
+              << " correct: " << questions[i].answer << endl;
+cout <<  questions[i].name << "     " << questions[i].birthYear << endl;
+}
         break;
       case 's':
         answer = royals->getSiblings(questions[i].name, questions[i].birthYear);
