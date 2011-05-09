@@ -26,7 +26,7 @@ inline int Hash(const char *p)
 
 inline int Hash2(int year, int val)
 {
-  val = (val + (year - 1800)) % 76980;
+  val = (val + (year - 1597)) % 76980;
   return val;
 }
 
@@ -163,7 +163,7 @@ Royals::Royals(const Person *people, int count)
 
   for(j = 1; j < count; j++)
   {
-if((strcmp(people[j].name, "Count Leopold von Drechsel auf Deufstetten") == 0) && (people[j].birthYear == 1962))
+if((strcmp(people[j].name, "Countess Julie von Hauke") == 0) && (people[j].birthYear == 1825))
   cout <<" Here\n";
 
  
@@ -183,7 +183,7 @@ if((strcmp(people[j].name, "Count Leopold von Drechsel auf Deufstetten") == 0) &
       id2[k] = atoi(cid);
       id1[k] = atoi(id);
 //cout << id1[k] << "                                  " << id2[k] <<"                 "  << people[j-1].ID << endl;
-      if(id1[k] != id2[k])
+      if(id1[k] != id2[k]) // Ancestor
       {
         flag = '0';
         back = level - k + 1;
@@ -244,28 +244,23 @@ int Royals::getChildren(const char *name, int birthYear)
   char Spousename[85];
   i = Hash(name);
   children = 0;
-//if((strcmp(name, "Princess Olga of Greece") == 0) && (birthYear == 1971))
-//  cout << "HERE\n";
+//  cout << name << "    " << birthYear << endl;
+if((strcmp(name, "Prince Maximilian of Bavaria") == 0) && (birthYear == 1800))
+  cout << "HERE\n";
 //cout << name << endl;
   while(check[i] != false)
   {
     if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
     {
-      break;
+      children = children + data[i]->child;
+      i = Hash2(birthYear, i);
     } else {
       i = Hash2(birthYear, i);
     }
   }
   //count = data[i]->spouseCount;
-  if(check[i] == true)
-  {
-    children = data[i]->child;
-    i = Hash2(birthYear, i);
-  } else {
-    children = -1;
-  }
 
-  while(check[i] != false)
+/*  while(check[i] != false)
   {
     if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
     {
@@ -276,7 +271,7 @@ int Royals::getChildren(const char *name, int birthYear)
   }
   if(check[i] == true)
     children = children + data[i]->child;
-
+*/
 /*  for(j = 0; j < count; j++)
   {
     strcpy(Spousename, data[i]->spouseName[j]);
@@ -310,7 +305,7 @@ void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
 
 int Royals::getMarriages(const char *name, int birthYear)
 {
-  int i;
+  int i, spouse = 0;
   i = 0;
   i = Hash(name);
 
@@ -319,16 +314,17 @@ int Royals::getMarriages(const char *name, int birthYear)
 //cout << data[i]->birth << "     " << birthYear << endl;
     if((strcmp(data[i]->name, name) == 0) && (data[i]->birth == birthYear))
     {
+      spouse = data[i]->spouseCount;
       break;
     } else {
       i = Hash2(birthYear, i);
     }
   }
 //cout << data[i].name << "          " << data[i].birth << endl;
-  if(check[i] != false)
+/*  if(check[i] != false)
   { return data[i]->spouseCount; }
-  else { return -1; }
-  return -1;
+  else { return -1; }*/
+  return spouse;
 } // getMariages
 
 
