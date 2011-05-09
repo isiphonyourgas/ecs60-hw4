@@ -22,13 +22,13 @@ inline int Hash(const char *p)
   val = val % 76980;
 
   return val;
-}
+}//Just a Hash function I found online
 
 inline int Hash2(int year, int val)
 {
-  val = (val + (year - 1597)) % 76980;
+  val = ((val + (year - 1597) ) + 1) % 76980;
   return val;
-}
+}//Secondary Hash Function
 
 Thing::Thing()
 {
@@ -38,7 +38,7 @@ Thing::Thing()
   parent = NULL;
 //  parent2 = NULL;
   child == 0;
-}
+}//Constrcutor
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
 {
@@ -46,37 +46,29 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
 //cout << p.ID << endl;
   switch(flag)
   {
-    case '0':
+    case '0':			//Ancestor
       for(int i = 0; i < level; i++)
-        ptr = ptr->parent;
+        ptr = ptr->parent;	//Used algorithm to determine pos
       parent = ptr;
       if(parent != NULL)//Not root Node
       {
-        (parent->child)++;
-if(strcmp(parent->name, "Walther Daublebsky") == 0)
-  cout << "HERE\n";
+        (parent->child)++;	//If its not the root node, we need to add a child to parent
       }
 //cout << "uncle\n";
       break;
-    case '1':
-      ptr = ptr->parent; //Sibling
+    case '1':			//Sibling
+      ptr = ptr->parent; //Must go up 1 level to reach parent
       parent = ptr;
       (parent->child)++;
-if(strcmp(parent->name, "Walther Daublebsky") == 0)
-  cout << "HERE\n";
-//cout << parent->name << " has " << parent->child << "       " << parent->id << endl;
-//cout << "sibling\n";
       break;
-    case '2':
+    case '2':		//Current pointer already points to parent of child
       parent = ptr;
       (parent->child)++;
-if(strcmp(parent->name, "Walther Daublebsky") == 0)
-  cout << "HERE\n";
 //cout << "Child\n";
       break;//It is a child
   }
 
-  
+  //These copy the information we need from the given array
   strcpy(name, p.name);
   birth = p.birthYear;
   spouseCount = p.spouseCount;
@@ -84,6 +76,8 @@ if(strcmp(parent->name, "Walther Daublebsky") == 0)
   check = true;
   child = 0;
   royalSpouse = 0;
+
+  //Checks and loads the spouses
   if(spouseCount != 0)
   {
     spouseName = new char*[spouseCount];
@@ -152,22 +146,22 @@ Royals::Royals(const Person *people, int count)
   int id1[15], id2[15];
   int back = 0;
   stringstream ss1, ss2;
-  for(i = 0; i < count; i++)
+  for(i = 0; i < count; i++) 	//Marks used tableslots
     check[i] = false;
 
-  i = Hash(people[0].name);
-  data[i] = new Thing;
+  i = Hash(people[0].name);	//Hash function
+  data[i] = new Thing;		//Initializes first thing
   temp = data[i]->Load(people[0], temp, 'a', back);
   check[i] = true;
  // level++;
 
-  for(j = 1; j < count; j++)
+  for(j = 1; j < count; j++)	//Loads the rest of the people
   {
-if((strcmp(people[j].name, "Countess Julie von Hauke") == 0) && (people[j].birthYear == 1825))
-  cout <<" Here\n";
+//if((strcmp(people[j].name, "Countess Julie von Hauke") == 0) && (people[j].birthYear == 1825))
+//  cout <<" Here\n";
 
  
-    flag = 'a';
+    flag = 'a';		//Flag to determine what to load as
     i = Hash(people[j].name);
     ss1.str(people[j].ID);
     ss2.str(people[j - 1].ID);
@@ -215,7 +209,7 @@ if((strcmp(people[j].name, "Countess Julie von Hauke") == 0) && (people[j].birth
       {
         data[i] = new Thing;
         check[i] = true;
-        temp = data[i]->Load(people[j], temp, flag, back);
+        temp = data[i]->Load(people[j], temp, flag, back);	//Returns the freshley loaded object for future use
 // cout << i << endl;
         break;
       } else {
@@ -224,7 +218,7 @@ if((strcmp(people[j].name, "Countess Julie von Hauke") == 0) && (people[j].birth
     }//while
 //    ss1.str("");
 //    ss2.str("");
-    ss1.clear();
+    ss1.clear();	//Cleats the stream for next person
     ss2.clear();
   }//for
     
@@ -245,9 +239,10 @@ int Royals::getChildren(const char *name, int birthYear)
   i = Hash(name);
   children = 0;
 //  cout << name << "    " << birthYear << endl;
-if((strcmp(name, "Prince Maximilian of Bavaria") == 0) && (birthYear == 1800))
-  cout << "HERE\n";
+//if((strcmp(name, "Prince Maximilian of Bavaria") == 0) && (birthYear == 1800))
+//  cout << "HERE\n";
 //cout << name << endl;
+//Multiple entries are handled by inserting again so we have to add up all the children
   while(check[i] != false)
   {
     if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
