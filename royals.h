@@ -9,14 +9,18 @@ class Thing {
 public:
   Thing();
   Thing* Load(const Person p, Thing *ptr, char flag, int level);
+ // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
   Thing *parent, **youngest;
   char name[85];
+  char **spouseName;
+  int *spouseYear;
   int birth;
   int spouseCount;
   char id[30];
   bool check;
   int child;
+  int royalSpouse;
 };
 /*
 class Data {
@@ -39,6 +43,7 @@ public:
     const char **descendentName, int *descendentBirthYear);
   int getMarriages(const char*name, int birthYear);
   int getSiblings(const char*name, int birthYear);
+  void printChild();
 
   Thing *data[76980];
   bool check[76980];

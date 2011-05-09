@@ -36,12 +36,13 @@ Thing::Thing()
   spouseCount = 0;
   birth = 0;
   parent = NULL;
+//  parent2 = NULL;
+  child == 0;
 }
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
 {
-
-
+  int i;
 //cout << p.ID << endl;
   switch(flag)
   {
@@ -49,13 +50,29 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
       for(int i = 0; i < level; i++)
         ptr = ptr->parent;
       parent = ptr;
+      if(parent != NULL)//Not root Node
+      {
+        (parent->child)++;
+if(strcmp(parent->name, "Walther Daublebsky") == 0)
+  cout << "HERE\n";
+      }
+//cout << "uncle\n";
       break;
     case '1':
       ptr = ptr->parent; //Sibling
       parent = ptr;
+      (parent->child)++;
+if(strcmp(parent->name, "Walther Daublebsky") == 0)
+  cout << "HERE\n";
+//cout << parent->name << " has " << parent->child << "       " << parent->id << endl;
+//cout << "sibling\n";
       break;
     case '2':
       parent = ptr;
+      (parent->child)++;
+if(strcmp(parent->name, "Walther Daublebsky") == 0)
+  cout << "HERE\n";
+//cout << "Child\n";
       break;//It is a child
   }
 
@@ -66,36 +83,69 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
   strcpy(id, p.ID);
   check = true;
   child = 0;
+  royalSpouse = 0;
+  if(spouseCount != 0)
+  {
+    spouseName = new char*[spouseCount];
+    spouseYear = new int[spouseCount];
+    for(i = 0; i < spouseCount; i++)
+    {
+      if(strcmp(p.spouseNames[i], "") == 0)
+      {  break; } else {
+        spouseName[i] = new char[85];
+        strcpy(spouseName[i], p.spouseNames[i]);
+        spouseYear[i] = p.spouseBirthYears[i];
+        royalSpouse++;
+      }
+    }
+  }
+/*
 if(parent != NULL)
 { 
     cout << "Parent: " << parent->id << "     This: " << id << endl;
-}
+    cout << parent->name << "               " << name << endl << endl;
+} else {
+    cout << "I'm all alone: " << id << "       ";
+    cout << name << endl << endl;
+}*/
   return this;
 }
 
-
-/*Data::Data() {}
-
-void Data::insert(Person people)
+/*Thing* Thing::update(const Person p, Thing *ptr, char flag, int level)
 {
-  int i;
-  i = Hash(people.name);
-  while(1)
+
+  switch(flag)
   {
-    if(data[i].check == false)
-    {
-      data[i].Load(people);
+    case '0':
+      for(int i = 0; i < level; i++)
+        ptr = ptr->parent;
+      parent = ptr;
+      if(parent != NULL)//Not root Node
+      {
+        (parent->child)++;
+      }
+//cout << "uncle\n";
       break;
-    } else {
-      i = Hash2(people.birthYear, i);
-    }
+    case '1':
+      ptr = ptr->parent; //Sibling
+      parent = ptr;
+      (parent->child)++;
+//cout << parent->name << " has " << parent->child << "       " << parent->id << endl;
+//cout << "sibling\n";
+      break;
+    case '2':
+      parent = ptr;
+      (parent->child)++;
+//cout << "Child\n";
+      break;//It is a child
   }
+  return this;
 }*/
 
 Royals::Royals(const Person *people, int count)
 {
   int i, j, level = 0;
-  int k;
+  int k, l;
   Thing *temp = NULL;
   char flag;
   char id[5], cid[5], clear[99];
@@ -108,17 +158,20 @@ Royals::Royals(const Person *people, int count)
   i = Hash(people[0].name);
   data[i] = new Thing;
   temp = data[i]->Load(people[0], temp, 'a', back);
+  check[i] = true;
  // level++;
 
   for(j = 1; j < count; j++)
-  {  
-if(strcmp(people[j].ID, "1.1.1.1.3.2.")==0)
-  cout << "Here\n";
+  {
+if((strcmp(people[j].name, "Count Leopold von Drechsel auf Deufstetten") == 0) && (people[j].birthYear == 1962))
+  cout <<" Here\n";
+
  
     flag = 'a';
     i = Hash(people[j].name);
     ss1.str(people[j].ID);
     ss2.str(people[j - 1].ID);
+
   //  ss1 << people[j].ID;
  //   ss2 << people[j-1].ID;
     for(k = 0; k < level; k++)
@@ -134,8 +187,6 @@ if(strcmp(people[j].ID, "1.1.1.1.3.2.")==0)
       {
         flag = '0';
         back = level - k + 1;
-        ss1.getline(clear, 99);
-        ss2.getline(clear,99);   //Clears both streams
         level = k;
         break;
       }
@@ -162,19 +213,19 @@ if(strcmp(people[j].ID, "1.1.1.1.3.2.")==0)
     {
       if(check[i] == false)
       {
-//cout << " 1 \n";
         data[i] = new Thing;
         check[i] = true;
         temp = data[i]->Load(people[j], temp, flag, back);
-//        level++;
-//cout << "2\n";
+// cout << i << endl;
         break;
-      } else {//if
+      } else {
         i = Hash2(people[j].birthYear, i);
       }//else
     }//while
 //    ss1.str("");
 //    ss2.str("");
+    ss1.clear();
+    ss2.clear();
   }//for
     
 }  // Royals()
@@ -189,18 +240,65 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
 
 int Royals::getChildren(const char *name, int birthYear)
 {
-/*  int i;
+  int i, j, k, count, children, SpousebirthYear;
+  char Spousename[85];
   i = Hash(name);
-  while(1)
+  children = 0;
+//if((strcmp(name, "Princess Olga of Greece") == 0) && (birthYear == 1971))
+//  cout << "HERE\n";
+//cout << name << endl;
+  while(check[i] != false)
   {
-    if((data[i]->name == name) && (data[i]->birth == birthYear))
+    if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
     {
       break;
     } else {
       i = Hash2(birthYear, i);
     }
-  }*/
-  return 0;
+  }
+  //count = data[i]->spouseCount;
+  if(check[i] == true)
+  {
+    children = data[i]->child;
+    i = Hash2(birthYear, i);
+  } else {
+    children = -1;
+  }
+
+  while(check[i] != false)
+  {
+    if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
+    {
+      break;
+    } else {
+      i = Hash2(birthYear, i);
+    }
+  }
+  if(check[i] == true)
+    children = children + data[i]->child;
+
+/*  for(j = 0; j < count; j++)
+  {
+    strcpy(Spousename, data[i]->spouseName[j]);
+    SpousebirthYear = data[i]->spouseYear[j];
+    k = Hash(Spousename);
+    while(check[k] != false)
+    {
+      if((strcmp(Spousename, data[k]->name) == 0) && (data[k]->birth == SpousebirthYear))
+      {
+        break;
+      } else {
+        k = Hash2(SpousebirthYear, k);
+      }
+    }
+    if(check[k] == true)
+    {
+      children = children + data[k]->child;
+    }
+  }
+*/
+//cout << "Returning: " << data[i]->name << endl;
+  return children; 
 } // getSiblings()
 
 
@@ -215,7 +313,8 @@ int Royals::getMarriages(const char *name, int birthYear)
   int i;
   i = 0;
   i = Hash(name);
-  while(1)
+
+  while(check[i] != false)
   {
 //cout << data[i]->birth << "     " << birthYear << endl;
     if((strcmp(data[i]->name, name) == 0) && (data[i]->birth == birthYear))
@@ -226,11 +325,23 @@ int Royals::getMarriages(const char *name, int birthYear)
     }
   }
 //cout << data[i].name << "          " << data[i].birth << endl;
-  return data[i]->spouseCount;
-} // getSiblings()
+  if(check[i] != false)
+  { return data[i]->spouseCount; }
+  else { return -1; }
+  return -1;
+} // getMariages
 
 
 int Royals::getSiblings(const char *name, int birthYear)
 {
   return 0;
 } // getSiblings()
+
+void Royals::printChild()
+{
+  for(int i = 0; i < 76980; i++)
+  {
+    if(check[i] != false)
+      cout << data[i]-> name << "   " << data[i]->child << endl;
+  }
+}
