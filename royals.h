@@ -9,6 +9,7 @@ class Thing {
 public:
   Thing();
   Thing* Load(const Person p, Thing *ptr, char flag, int level);
+  void updateID(Person p);
  // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
   Thing *parent, **youngest;
@@ -17,7 +18,8 @@ public:
   int *spouseYear;
   int birth;
   int spouseCount;
-  char id[30];
+  int idCount;
+  char *id[16];
   bool check;
   int child;
   int royalSpouse;

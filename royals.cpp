@@ -36,8 +36,8 @@ Thing::Thing()
   spouseCount = 0;
   birth = 0;
   parent = NULL;
-//  parent2 = NULL;
   child == 0;
+  idCount = 0;
 }//Constrcutor
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
@@ -78,7 +78,9 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   strcpy(name, p.name);
   birth = p.birthYear;
   spouseCount = p.spouseCount;
-  strcpy(id, p.ID);
+  id[idCount] = new char[30];
+  strcpy(id[idCount], p.ID);
+  idCount++;
   check = true;
   child = 0;
   royalSpouse = 0;
@@ -105,13 +107,34 @@ thisthing = this;
 
 while(thisthing != NULL)
 {
-  cout << thisthing->id << " --> ";
+  cout << thisthing->id[0] << " --> ";
   thisthing = thisthing->parent;
 }
 
-cout << endl;*/
-
+cout << endl;
+*/
   return this;
+}
+
+void Thing::updateID(Person p)
+{
+  id[idCount] = new char[30];
+  strcpy(id[idCount], p.ID);
+  idCount++;
+
+
+  Thing *thisthing;
+  thisthing = this;
+
+  while(thisthing != NULL)
+  {
+    cout << thisthing->id[thisthing->idCount - 1] << " --> ";
+    thisthing = thisthing->parent;
+  }  
+
+  cout << endl;
+
+
 }
 
 
@@ -193,20 +216,21 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     
     while(1)
     {
-    /*  if(check[i] == true)
+      if(check[i] == true)
       {
-        if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
+       /* if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
+        {
+          cout << "COLLISION\n";
+          temp = data[i];
+          data[i]->updateID(people[j]);
           break;
-      }*/
+        }*/
+      }
       if(check[i] == false)
       {
           data[i] = new Thing;
           check[i] = true;
-//  cout << people[j].ID <<"     " <<  level << "      "<< back << endl;
-
           temp = data[i]->Load(people[j], temp, flag, back);	//Returns the freshley loaded object for future use
-     //temp->parent
-// cout << i << endl;
           break;
       } else {
         i = Hash2(people[j].birthYear, i);
@@ -228,14 +252,10 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
 
 int Royals::getChildren(const char *name, int birthYear)
 {
-  int i, j, k, count, children, SpousebirthYear;
+  unsigned int i, j, k, count, children, SpousebirthYear;
   char Spousename[85];
   i = Hash(name);
   children = 0;
-//  cout << name << "    " << birthYear << endl;
-//if((strcmp(name, "Annica Martin") == 0) && (birthYear == 1853))
-//  cout << "HERE\n";
-//cout << name << endl;
 //Multiple entries are handled by inserting again so we have to add up all the children
   while(check[i] != false)
   {
@@ -243,46 +263,10 @@ int Royals::getChildren(const char *name, int birthYear)
     {
       children = children + data[i]->child;
       break;
-    //  i = Hash2(birthYear, i);
     } else {
       i = Hash2(birthYear, i);
     }
   }
-  //count = data[i]->spouseCount;
-
-/*  while(check[i] != false)
-  {
-    if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
-    {
-      break;
-    } else {
-      i = Hash2(birthYear, i);
-    }
-  }
-  if(check[i] == true)
-    children = children + data[i]->child;
-*/
-/*  for(j = 0; j < count; j++)
-  {
-    strcpy(Spousename, data[i]->spouseName[j]);
-    SpousebirthYear = data[i]->spouseYear[j];
-    k = Hash(Spousename);
-    while(check[k] != false)
-    {
-      if((strcmp(Spousename, data[k]->name) == 0) && (data[k]->birth == SpousebirthYear))
-      {
-        break;
-      } else {
-        k = Hash2(SpousebirthYear, k);
-      }
-    }
-    if(check[k] == true)
-    {
-      children = children + data[k]->child;
-    }
-  }
-*/
-//cout << "Returning: " << data[i]->name << endl;
   return children; 
 } // getSiblings()
 
@@ -320,7 +304,32 @@ int Royals::getMarriages(const char *name, int birthYear)
 
 int Royals::getSiblings(const char *name, int birthYear)
 {
-  return 0;
+
+  unsigned int i, j, k, count, children, SpousebirthYear;
+  char Spousename[85];
+  Thing *parent;
+  i = Hash(name);
+  children = 0;
+//Multiple entries are handled by inserting again so we have to add up all the children
+  while(check[i] != false)
+  {
+    if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
+    {
+      if(data[i]-> parent != NULL)
+      {
+        parent = data[i]->parent;
+        children = parent->child;
+      } else {
+        children = 1;
+      }
+      break;
+    } else {
+      i = Hash2(birthYear, i);
+    }
+  }
+  children = children -1;
+  return children;
+  
 } // getSiblings()
 
 void Royals::printChild()
