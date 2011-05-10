@@ -1,6 +1,6 @@
 20 15
 d,1880,Infanta Mara de las Mercedes of Spain,2010,Enrique de Ledesma y Moreno
-s,2000,Alejandra Hernndez y Moreno,1
+s,2000,Inigo Hernndez y Moreno,1
 c,1938,Infante Carlos of Spain,0
 d,1857,Alfonso XII,2010,Enrique de Ledesma y Moreno
 a,1996,Teresa Urquijo y Moreno,1972,Delia Moreno y de Borbn,1937,Princess Teresa of Bourbon
@@ -9,7 +9,7 @@ a,2001,Iigo Moreno y Calvo,1901,Infant Alfonso of Spain,1880,Infanta Mara de las
 c,1901,Infant Alfonso of Spain,2
 d,1901,Infant Alfonso of Spain,2010,Enrique de Ledesma y Moreno
 s,2010,Enrique de Ledesma y Moreno,1
-a,2000,Alejandra Hernndez y Moreno,1999,Juan Urquijo y Moreno,1937,Princess Teresa of Bourbon
+a,2000,Inigo Hernndez y Moreno,1999,Juan Urquijo y Moreno,1937,Princess Teresa of Bourbon
 a,1967,Beatriz Moreno y de Borbn,1901,Infant Alfonso of Spain,1880,Infanta Mara de las Mercedes of Spain
 a,1999,Juan Urquijo y Moreno,1880,Infanta Mara de las Mercedes of Spain,1857,Alfonso XII
 a,1962,Rodrigo Moreno y de Borbn,2009,daughter3,1937,Princess Teresa of Bourbon

@@ -116,19 +116,19 @@ int main(int argc, char** argv)
         answer = royals->getChildren(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
         {
-          cout << "Question #" << i << " your answer: " << answer 
+/*          cout << "Question #" << i << " your answer: " << answer 
               << " correct: " << questions[i].answer << endl;
 cout << questions[i].name << "      " << questions[i].birthYear << "    Child" << endl;
-
+*/
 }
         break;
       case 'm':
         answer = royals->getMarriages(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
         {
-          cout << "Question #" << i << " your answer: " << answer 
+/*          cout << "Question #" << i << " your answer: " << answer 
               << " correct: " << questions[i].answer << endl;
-cout <<  questions[i].name << "     " << questions[i].birthYear << "     Marrige" << endl;
+cout <<  questions[i].name << "     " << questions[i].birthYear << "     Marrige" << endl;*/
 }
         break;
       case 's':
