@@ -35,39 +35,41 @@ Thing::Thing()
   check = false;
   spouseCount = 0;
   birth = 0;
-  parent = NULL;
-  child == 0;
+  parent = new Thing*[2];
+  parent[0] = NULL;
+  parent[1] = NULL;
+  child = 0;
   idCount = 0;
+  name = new char[85];
 }//Constrcutor
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
 {
-  int i;
 if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   cout << "error\n";
 
-
+  parentC = 0;
 //cout << p.ID << endl;
   switch(flag)
   {
     case '0':			//Ancestor
       for(int i = 0; i < level; i++)
-        ptr = ptr->parent;	//Used algorithm to determine pos
-      parent = ptr;
-      if(parent != NULL)//Not root Node
+        ptr = ptr->parent[ptr->parentC];	//Used algorithm to determine pos
+      parent[0] = ptr;
+      if(parent[0] != NULL)//Not root Node
       {
-        (parent->child)++;	//If its not the root node, we need to add a child to parent
+        (parent[0]->child)++;	//If its not the root node, we need to add a child to parent
       }
 //cout << "uncle\n";
       break;
     case '1':			//Sibling
-      ptr = ptr->parent; //Must go up 1 level to reach parent
-      parent = ptr;
-      (parent->child)++;
+      ptr = ptr->parent[ptr->parentC]; //Must go up 1 level to reach parent
+      parent[0] = ptr;
+      (parent[0]->child)++;
       break;
     case '2':		//Current pointer already points to parent of child
-      parent = ptr;
-      (parent->child)++;
+      parent[0] = ptr;
+      (parent[0]->child)++;
 //cout << "Child\n";
       break;//It is a child
     case 'a':
@@ -85,22 +87,18 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   child = 0;
   royalSpouse = 0;
 
-  //Checks and loads the spouses
-  if(spouseCount != 0)
+  youngest = this;
+  Thing *temp;
+  temp = parent[0];
+/*  if(temp != NULL)
   {
-    spouseName = new char*[spouseCount];
-    spouseYear = new int[spouseCount];
-    for(i = 0; i < spouseCount; i++)
+    while(((temp->youngest)->birth < p.birthYear) && (temp->parent != NULL))
     {
-      if(strcmp(p.spouseNames[i], "") == 0)
-      {  break; } else {
-        spouseName[i] = new char[85];
-        strcpy(spouseName[i], p.spouseNames[i]);
-        spouseYear[i] = p.spouseBirthYears[i];
-        royalSpouse++;
-      }
+      temp->youngest = this;
+      temp = temp->parent[0];
     }
-  }
+  }*/
+
 /*
 Thing *thisthing;
 thisthing = this;
@@ -116,35 +114,33 @@ cout << endl;
   return this;
 }
 
-void Thing::updateID(Person p)
+Thing* Thing::update(Person p, Thing *ptr, char flag, int level)
 {
   id[idCount] = new char[30];
   strcpy(id[idCount], p.ID);
   idCount++;
 
-
-  Thing *thisthing;
-  thisthing = this;
-
-  while(thisthing != NULL)
+  switch(flag)
   {
-    cout << thisthing->id[thisthing->idCount - 1] << " --> ";
-    thisthing = thisthing->parent;
-  }  
+    case '0'://ancestor
+      break;
+    case '1'://sibling
+      break;
+    case '2'://child
+      break;
+  }
 
-  cout << endl;
 
-
+  return this;
 }
 
 
 Royals::Royals(const Person *people, int count)
 {
   int i, j, level = 0;
-  int k, l, prevlvl, m;
+  int k, prevlvl, m;
   Thing *temp = NULL;
   char flag;
-  char id[40], cid[40], clear[99];
   char id1, id2;
   int back = 0;
   stringstream ss1, ss2;
@@ -218,11 +214,11 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     {
       if(check[i] == true)
       {
-       /* if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
+  /*      if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
           cout << "COLLISION\n";
           temp = data[i];
-          data[i]->updateID(people[j]);
+          temp = data[i]->update(people[j], temp, flag, back);
           break;
         }*/
       }
@@ -252,8 +248,7 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
 
 int Royals::getChildren(const char *name, int birthYear)
 {
-  unsigned int i, j, k, count, children, SpousebirthYear;
-  char Spousename[85];
+  unsigned int i, children;
   i = Hash(name);
   children = 0;
 //Multiple entries are handled by inserting again so we have to add up all the children
@@ -272,8 +267,28 @@ int Royals::getChildren(const char *name, int birthYear)
 
 
 void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
-    const char **descendentName, int *descendentBirthYear)
+     const char **descendentName, int *descendentBirthYear)
 {
+/*
+  unsigned int i, j, k, birth;
+  char *name;
+  i = Hash(ancestorName);
+//Multiple entries are handled by inserting again so we have to add up all the children
+  while(check[i] != false)
+  {
+    if((strcmp(ancestorName, data[i]->name) == 0) && (data[i]->birth == ancestorBirthYear))
+    {
+      //descendentName = &((data[i]->youngest)->name);
+     // descendentBirthYear = &((data[i]->youngest)->birth);
+      birth  = (data[i]->youngest)->birth;
+      strcpy(name, (data[i]->youngest)->name);
+cout << name << "         " << birth << endl;
+      break;
+    } else {
+      i = Hash2(ancestorBirthYear, i);
+    }
+  }
+*/
 } //getDescedent()
 
 
@@ -305,8 +320,7 @@ int Royals::getMarriages(const char *name, int birthYear)
 int Royals::getSiblings(const char *name, int birthYear)
 {
 
-  unsigned int i, j, k, count, children, SpousebirthYear;
-  char Spousename[85];
+  unsigned int i, children;
   Thing *parent;
   i = Hash(name);
   children = 0;
@@ -315,9 +329,9 @@ int Royals::getSiblings(const char *name, int birthYear)
   {
     if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))
     {
-      if(data[i]-> parent != NULL)
+      if(data[i]->parent[0] != NULL)
       {
-        parent = data[i]->parent;
+        parent = data[i]->parent[0];
         children = parent->child;
       } else {
         children = 1;

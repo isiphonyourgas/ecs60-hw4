@@ -9,11 +9,12 @@ class Thing {
 public:
   Thing();
   Thing* Load(const Person p, Thing *ptr, char flag, int level);
-  void updateID(Person p);
+  Thing* update(Person p, Thing *ptr, char flag, int level);
  // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
-  Thing *parent, **youngest;
-  char name[85];
+  Thing **parent, *youngest;
+  int parentC;
+  char *name;
   char **spouseName;
   int *spouseYear;
   int birth;
