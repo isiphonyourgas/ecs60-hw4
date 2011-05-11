@@ -8,12 +8,12 @@
 class Thing {
 public:
   Thing();
-  Thing* Load(const Person p, Thing *ptr, char flag, int level);
-  Thing* update(Person p, Thing *ptr, char flag, int level, Person previous);
+  Thing* Load(const Person p, Thing *ptr, char flag, int level, const char *prev);
+  Thing* update(Person p, Thing *ptr, char flag, int level, const char *prev);
  // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
   Thing **parent, *youngest;
-  int parentC;
+  int parentC, current;
   char *name;
   char **spouseName;
   int *spouseYear;

@@ -44,18 +44,36 @@ Thing::Thing()
   youngest = NULL;
 }//Constrcutor
 
-Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
+Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char *prev)
 {
 if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   cout << "error\n";
 
-  parentC = 0;
+  int len;
+  current = 0;
 //cout << p.ID << endl;
+  len = strlen(prev);
+ /* if(0 == strncmp(prev, parent[0]->id[parent[0]->idCount], len))//Checks the last id to know which parent to go up
+  {
+    current = 0;
+  } else {
+    current = 1;
+  }*/
   switch(flag)
   {
     case '0':			//Ancestor
+      
       for(int i = 0; i < level; i++)
-        ptr = ptr->parent[ptr->parentC];	//Used algorithm to determine pos
+      {
+        
+
+//Use ID to determine which parent to iterate up
+
+
+
+
+        ptr = ptr->parent[ptr->current];	//Used algorithm to determine pos
+      }
       parent[0] = ptr;
       if(parent[0] != NULL)//Not root Node
       {
@@ -64,7 +82,7 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
 //cout << "uncle\n";
       break;
     case '1':			//Sibling
-      ptr = ptr->parent[ptr->parentC]; //Must go up 1 level to reach parent
+      ptr = ptr->parent[current]; //Must go up 1 level to reach parent
       parent[0] = ptr;
       (parent[0]->child)++;
       break;
@@ -83,7 +101,6 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   spouseCount = p.spouseCount;
   id[idCount] = new char[30];
   strcpy(id[idCount], p.ID);
-  idCount++;
   check = true;
   child = 0;
   royalSpouse = 0;
@@ -108,8 +125,8 @@ thisthing = this;
 
 while(thisthing != NULL)
 {
-  cout << thisthing->id[idCount - 1] << " --> ";
-  thisthing = thisthing->parent[thisthing->parentC];
+  cout << thisthing->id[thisthing->idCount] << " --> ";
+  thisthing = thisthing->parent[thisthing->current];
 }
 
 cout << endl;
@@ -117,46 +134,106 @@ cout << endl;
   return this;
 }
 
-Thing* Thing::update(Person p, Thing *ptr, char flag, int level, Person previous)
+Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *prev)
 {
+  idCount++;
   id[idCount] = new char[30];
   strcpy(id[idCount], p.ID);
-  idCount++;
+  int i;
+/*
+  len = strlen(prev);
+  if(0 == strncmp(prev, parent[0]->id[parent[0]->idCount], len))//Checks the last id to know which parent to go up
+  {
+    current = 0;
+  } else {
+    current = 1;
+  }
+*/
 
   switch(flag)
   {
     case '0'://ancestor
-cout << "ANCESTOR SHIT\n";
-      break;
-    case '1'://sibling
-cout << "SIBLING SHIT\n";
-      break;
-    case '2'://child
-    if(parentC == 0)
+      for(i = 0; i < level; i++)
+      {
+        ptr = ptr->parent[ptr->current];
+      }
+      
+    if(parent[1] == NULL)
     {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
-        
+        current = 0;
       } else {
         parent[1] = ptr;
-        parentC++;
+        current = 1;
+        (parent[1]->child)++;
+      }
+    } else {
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        current = 0;
+      } else {
+        current = 1;
+      }
+    }
+      break;
+    case '1'://sibling
+    ptr = ptr->parent[ptr->current];
+
+    if(parent[1] == NULL)
+    {
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        current = 0;
+      } else {
+        parent[1] = ptr;
+        current = 1;
+        (parent[1]->child)++;
+      }
+    } else {
+
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        current = 0;
+      } else {
+        current = 1;
+      }
+    }
+      break;
+    case '2'://child
+    if(parent[1] == NULL)
+    {
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        current = 0;
+      } else {
+        parent[1] = ptr;
+        current = 1;
+        (parent[1]->child)++;
+      }
+    } else {
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        current = 0;
+      } else {
+        current = 1;
       }
     }
     break;
   }
 
 
-
 Thing *thisthing;
 thisthing = this;
-
+/*
 while(thisthing != NULL)
 {
-  cout << thisthing->id[(thisthing->idCount) - 1] << " --> ";
-  thisthing = thisthing->parent[parentC];
+  cout << thisthing->id[(thisthing->idCount)] << " --> ";
+  thisthing = thisthing->parent[thisthing->current];
 }
 
 cout << endl;
+*/
   return this;
 }
 
@@ -177,7 +254,7 @@ Royals::Royals(const Person *people, int count)
 
   i = Hash(people[0].name);	//Hash function
   data[i] = new Thing;		//Initializes first thing
-  temp = data[i]->Load(people[0], temp, 'a', back);
+  temp = data[i]->Load(people[0], temp, 'a', back, "NULL");
   check[i] = true;
   level++;
 
@@ -238,21 +315,20 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     
     while(1)
     {
-/*      if(check[i] == true)
+      if(check[i] == true)
       {
         if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
-          cout << "COLLISION\n";
     //      temp = data[i];
-          temp = data[i]->update(people[j], temp, flag, back, people[j-1]);
+          temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID);
           break;
         }
-      }*/
+      }
       if(check[i] == false)
       {
           data[i] = new Thing;
           check[i] = true;
-          temp = data[i]->Load(people[j], temp, flag, back);	//Returns the freshley loaded object for future use
+          temp = data[i]->Load(people[j], temp, flag, back, people[j-1].ID);	//Returns the freshley loaded object for future use
           break;
       } else {
         i = Hash2(people[j].birthYear, i);
@@ -296,8 +372,7 @@ void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
      const char **descendentName, int *descendentBirthYear)
 {
 
-  unsigned int i, j, k, birth;
-  char *name;
+  unsigned int i;
   i = Hash(ancestorName);
 //Multiple entries are handled by inserting again so we have to add up all the children
   while(check[i] != false)
