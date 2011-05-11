@@ -322,16 +322,14 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     //      temp = data[i];
           temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID);
           break;
+        } else {
+          i = Hash2(people[j].birthYear, i);
         }
-      }
-      if(check[i] == false)
-      {
+      } else {
           data[i] = new Thing;
           check[i] = true;
           temp = data[i]->Load(people[j], temp, flag, back, people[j-1].ID);	//Returns the freshley loaded object for future use
           break;
-      } else {
-        i = Hash2(people[j].birthYear, i);
       }//else
     }//while
     ss1.clear();	//Cleats the stream for next person
