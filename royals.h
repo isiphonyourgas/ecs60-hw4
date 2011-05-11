@@ -9,7 +9,7 @@ class Thing {
 public:
   Thing();
   Thing* Load(const Person p, Thing *ptr, char flag, int level);
-  Thing* update(Person p, Thing *ptr, char flag, int level);
+  Thing* update(Person p, Thing *ptr, char flag, int level, Person previous);
  // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
   Thing **parent, *youngest;

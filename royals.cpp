@@ -97,24 +97,24 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
       temp->youngest = this;
       temp = temp->parent[0];
     }
-  }*/
+  }
+*/
 
-/*
 Thing *thisthing;
 thisthing = this;
 
 while(thisthing != NULL)
 {
-  cout << thisthing->id[0] << " --> ";
-  thisthing = thisthing->parent;
+  cout << thisthing->id[idCount - 1] << " --> ";
+  thisthing = thisthing->parent[thisthing->parentC];
 }
 
 cout << endl;
-*/
+
   return this;
 }
 
-Thing* Thing::update(Person p, Thing *ptr, char flag, int level)
+Thing* Thing::update(Person p, Thing *ptr, char flag, int level, Person previous)
 {
   id[idCount] = new char[30];
   strcpy(id[idCount], p.ID);
@@ -123,11 +123,23 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level)
   switch(flag)
   {
     case '0'://ancestor
+cout << "ANCESTOR SHIT\n";
       break;
     case '1'://sibling
+cout << "SIBLING SHIT\n";
       break;
     case '2'://child
-      break;
+    if(parentC == 0)
+    {
+      if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
+      {
+        
+      } else {
+        parent[1] = ptr;
+        parentC++;
+      }
+    }
+    break;
   }
 
 
@@ -214,11 +226,11 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     {
       if(check[i] == true)
       {
-  /*      if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
+    /*    if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
           cout << "COLLISION\n";
           temp = data[i];
-          temp = data[i]->update(people[j], temp, flag, back);
+          temp = data[i]->update(people[j], temp, flag, back, people[j-1]);
           break;
         }*/
       }
