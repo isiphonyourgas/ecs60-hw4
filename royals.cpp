@@ -113,7 +113,7 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
     if((temp->youngest)->birth < p.birthYear)
     {
       temp->youngest = this;
-      temp = temp->parent[0];
+      temp = temp->parent[temp->current];
     } else {
       break;
     }
@@ -222,6 +222,21 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
     break;
   }
 
+  Thing *temp;
+
+  temp = parent[current];
+  while(temp != NULL)
+  {
+    if((temp->youngest)->birth < (this->youngest)->birth)
+    {
+      temp->youngest = this->youngest;
+      temp = temp->parent[temp->current];
+    } else {
+      break;
+    }
+  }
+
+
 /*
 Thing *thisthing;
 thisthing = this;
@@ -319,7 +334,6 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
       {
         if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
-    //      temp = data[i];
           temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID);
           break;
         } else {
