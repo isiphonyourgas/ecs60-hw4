@@ -222,10 +222,10 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
     break;
   }
 
-
+/*
 Thing *thisthing;
 thisthing = this;
-/*
+
 while(thisthing != NULL)
 {
   cout << thisthing->id[(thisthing->idCount)] << " --> ";
