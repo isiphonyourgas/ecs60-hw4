@@ -41,6 +41,7 @@ Thing::Thing()
   child = 0;
   idCount = 0;
   name = new char[85];
+  youngest = NULL;
 }//Constrcutor
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level)
@@ -90,16 +91,18 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
   youngest = this;
   Thing *temp;
   temp = parent[0];
-/*  if(temp != NULL)
+  while(temp != NULL)
   {
-    while(((temp->youngest)->birth < p.birthYear) && (temp->parent != NULL))
+    if((temp->youngest)->birth < p.birthYear)
     {
       temp->youngest = this;
       temp = temp->parent[0];
+    } else {
+      break;
     }
   }
-*/
 
+/*
 Thing *thisthing;
 thisthing = this;
 
@@ -110,7 +113,7 @@ while(thisthing != NULL)
 }
 
 cout << endl;
-
+*/
   return this;
 }
 
@@ -143,6 +146,17 @@ cout << "SIBLING SHIT\n";
   }
 
 
+
+Thing *thisthing;
+thisthing = this;
+
+while(thisthing != NULL)
+{
+  cout << thisthing->id[(thisthing->idCount) - 1] << " --> ";
+  thisthing = thisthing->parent[parentC];
+}
+
+cout << endl;
   return this;
 }
 
@@ -224,16 +238,16 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
     
     while(1)
     {
-      if(check[i] == true)
+/*      if(check[i] == true)
       {
-    /*    if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
+        if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
           cout << "COLLISION\n";
-          temp = data[i];
+    //      temp = data[i];
           temp = data[i]->update(people[j], temp, flag, back, people[j-1]);
           break;
-        }*/
-      }
+        }
+      }*/
       if(check[i] == false)
       {
           data[i] = new Thing;
@@ -281,7 +295,7 @@ int Royals::getChildren(const char *name, int birthYear)
 void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
      const char **descendentName, int *descendentBirthYear)
 {
-/*
+
   unsigned int i, j, k, birth;
   char *name;
   i = Hash(ancestorName);
@@ -292,15 +306,15 @@ void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
     {
       //descendentName = &((data[i]->youngest)->name);
      // descendentBirthYear = &((data[i]->youngest)->birth);
-      birth  = (data[i]->youngest)->birth;
-      strcpy(name, (data[i]->youngest)->name);
-cout << name << "         " << birth << endl;
+      *descendentBirthYear = (data[i]->youngest)->birth;
+//      strcpy(name, (data[i]->youngest)->name);
+      *descendentName = (data[i]->youngest)->name;
       break;
     } else {
       i = Hash2(ancestorBirthYear, i);
     }
   }
-*/
+
 } //getDescedent()
 
 

@@ -20,7 +20,7 @@ public:
   int birth;
   int spouseCount;
   int idCount;
-  char *id[16];
+  char *id[100];
   bool check;
   int child;
   int royalSpouse;

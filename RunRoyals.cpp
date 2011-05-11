@@ -145,9 +145,12 @@ cout << questions[i].name << "      " << questions[i].birthYear << "    Sibling"
               &name, &birthYear);
         if(birthYear != questions[i].answerBirthYear
           || strcmp(name, questions[i].answerName) != 0)
-/*          cout << "Question #" << i << " your answer: " << name << ' '
+{
+          cout << "Question #" << i << " your answer: " << name << ' '
             << birthYear  << " correct: " << questions[i].answerName
-            << ' ' << questions[i].answerBirthYear << endl;*/
+            << ' ' << questions[i].answerBirthYear << endl;
+cout << questions[i].name << "      " << questions[i].birthYear << "    Decendent" << endl;
+}
         break;
       case 'a':
         royals->getAncestor(questions[i].name, questions[i].birthYear,
