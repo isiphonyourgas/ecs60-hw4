@@ -100,7 +100,7 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char 
     }
   }
 
-
+/*
 Thing *thisthing;
 thisthing = this;
 
@@ -111,7 +111,7 @@ while(thisthing != NULL)
 }
 
 cout << endl;
-
+*/
   return this;
 }
 
@@ -231,7 +231,7 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
   }
 
 
-
+/*
 Thing *thisthing;
 thisthing = this;
 
@@ -242,7 +242,7 @@ while(thisthing != NULL)
 }
 
 cout << endl;
-
+*/
   return this;
 }
 
@@ -366,17 +366,22 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
   char *id, *cid;
   k = 0;
   l = 0;
-  Thing *temp, *current;
-  while((k <= data[i]->idCount) && (l <= data[j]->idCount))
+  Thing *temp, *current, *item1, *item2;
+  item1 = data[i];
+  item2 = data[j];
+  while((k <= item1->idCount) && (l <= item2->idCount))
   {
     count = 0;
     jump = 0;
-    strcpy(id1,data[i]->id[k]);
-    strcpy(id2, data[j]->id[l]);
-    id = strtok(id1, ".");
-    cid = strtok(id2, ".");
+//    strcpy(id1,(data[i]->id)[k]);
+//    strcpy(id2, (data[j]->id)[l]);
+    id = strtok(item1->id[k], ".");
+    cid = strtok(item2->id[l], ".");
+cout << item1->id[1] << "           " << item2->id[1] << endl;
     while(0 == strcmp(id, cid))
     {
+cout << id << endl;
+cout << cid << endl << endl;
       count++;
       id = strtok(NULL, ".");
       cid = strtok(NULL, ".");
