@@ -428,7 +428,8 @@ cout << cid << endl << endl;
       if(current->birth < temp->birth)
         current = temp;
     }
-
+    ss1.clear();
+    ss2.clear();
   }
 
 cout << current->name << "          " << current->birth << endl;
