@@ -377,44 +377,62 @@ for(i = 0; i < 76980; i++)
       j = Hash2(descendentBirthYear2, j);
     }
   }
-  int k, l, count, jump, a, parentID;
-  char id, cid;
+  int k, l, count, jump, a, parentID, b, len;
+  int result1[15], result2[15];
+  char *id, *cid, *totalID;
+//  char id1[30], id2[30];
   k = 0;
   l = 0;
+  b = 0;
   Thing *temp, *current, *item1, *item2;
   item1 = data[i];
   item2 = data[j];
   stringstream ss1, ss2;
   while((k <= item1->idCount) && (l <= item2->idCount))
   {
-    count = 0;
-    jump = 0;
-//    strcpy(id1,(data[i]->id)[k]);
-//    strcpy(id2, (data[j]->id)[l]);
-//    id = strtok(id1, ".");
-//    cid = strtok(id2, ".");
-cout << item1->id[0] << "           " << item2->id[0] << endl;
-      ss1.str(data[i]->id[k]);
-      ss2.str(data[j]->id[l]);
-
-    while(id == cid)
+    strcpy(id1, data[i]->id[k]);
+    strcpy(id2, data[j]->id[k]);
+cout << id1 << "      " << id2 << endl;
+//    len = strlen(id1);
+    id = strtok(id1, ".");
+    a = 0;
+//cout << id1 << "     " << id2 << endl;
+  //  for(a = 0; a < len; a++)
+    while(id != NULL)
     {
-cout << id << endl;
-cout << cid << endl << endl;
-      id = ss1.get();
-      cid = ss2.get();
-      if(id == '.')
-        count++;
-      
+      result1[a] = *id - 48;
+      id = strtok(NULL, ".");
+cout << result1[a] << ".";
+      a++;
     }
-    while((ss1.good()==true))
+cout << endl;
+    a = 0;
+    id = strtok(id2, ".");
+    while(id != NULL)
+    {
+      result2[a] = *id - 48;
+      id = strtok(NULL, ".");
+cout << result2[a] << ".";
+      a++;
+    }
+cout << endl;
+
+  for(b = 0; b < 15; b++)
+  {
+    if(result1[b] != result2[b])
+      break;
+  }
+  jump = a - b;
+/*    while((ss1.good()==true))
     {
       id = ss1.get();
       if(id == '.')
         jump++;
       //strtok(NULL, ".");
-    }
-    temp = data[i];
+    }*/
+
+cout << jump << "  " << count << endl;
+    temp = data[j];
     parentID = temp->parentID[parentID];
     for(a = 0; a < jump; a++)
     {
@@ -430,8 +448,8 @@ cout << cid << endl << endl;
     }
     ss1.clear();
     ss2.clear();
-  }
-
+  
+}
 cout << current->name << "          " << current->birth << endl;
 } // getAncestor()
 
