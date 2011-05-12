@@ -164,7 +164,7 @@ cout << questions[i].name << "      " << questions[i].birthYear << "    Decenden
             << birthYear  << " correct: " << questions[i].answerName
             << ' ' << questions[i].answerBirthYear << endl;
 cout << questions[i].name << "      " << questions[i].birthYear << endl;
-cout << questions[i].name2 << "      " << questions[i].birthYear2 << "    Decendent" << endl;
+cout << questions[i].name2 << "      " << questions[i].birthYear2 << "    Ancestor" << endl;
 
 }
         break;

@@ -10,9 +10,13 @@ public:
   Thing();
   Thing* Load(const Person p, Thing *ptr, char flag, int level, const char *prev);
   Thing* update(Person p, Thing *ptr, char flag, int level, const char *prev);
+  void mark();
+  void unmark();
+  Thing* search();
  // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
   Thing **parent, *youngest;
+  bool flip;
   int parentC, current;
   char *name;
   char **spouseName;

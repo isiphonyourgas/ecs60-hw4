@@ -20,9 +20,10 @@
     </conf>
     <conf name="1" type="0">
       <gizmo_options version="3">
+        <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
-        <args>trees-7698-100000-4.txt</args>
+        <args>trees-17079-100000-4.txt</args>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>0</console-type>
