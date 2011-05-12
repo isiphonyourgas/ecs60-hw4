@@ -80,8 +80,11 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char 
   strcpy(name, p.name);
   birth = p.birthYear;
   spouseCount = p.spouseCount;
-  id[idCount] = new char[30];
-  strcpy(id[idCount], p.ID);
+  id[0] = new char[30];
+  strcpy(id[0], p.ID);
+idCount++;
+//cout << this->id[0] << endl;;
+
   check = true;
   child = 0;
   royalSpouse = 0;
@@ -121,15 +124,7 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
   id[idCount] = new char[30];
   strcpy(id[idCount], p.ID);
   int i;
-/*
-  len = strlen(prev);
-  if(0 == strncmp(prev, parent[0]->id[parent[0]->idCount], len))//Checks the last id to know which parent to go up
-  {
-    current = 0;
-  } else {
-    current = 1;
-  }
-*/
+
 
   switch(flag)
   {
@@ -337,6 +332,16 @@ Royals::Royals(const Person *people, int count)
     ss2.clear();
   }//for
     
+/*
+for(i = 0; i < 76980; i++)
+{
+  if(check[i] != NULL)
+  {
+    cout << data[i]->id[0] << endl;
+  }
+}*/
+
+
 }  // Royals()
 
 
@@ -345,6 +350,16 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
     const char **ancestorName, int *ancestorBirthYear)
 {
   unsigned int i, j;
+
+/*
+for(i = 0; i < 76980; i++)
+{
+  if(check[i] != NULL)
+  {
+    cout << data[i]->id[0] << endl;
+  }
+}*/
+
   char id1[30], id2[30];
   i = Hash(descendentName1);//i stores decendent 1
   j = Hash(descendentName2);//j stores decendent 2
@@ -363,33 +378,41 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
     }
   }
   int k, l, count, jump, a, parentID;
-  char *id, *cid;
+  char id, cid;
   k = 0;
   l = 0;
   Thing *temp, *current, *item1, *item2;
   item1 = data[i];
   item2 = data[j];
+  stringstream ss1, ss2;
   while((k <= item1->idCount) && (l <= item2->idCount))
   {
     count = 0;
     jump = 0;
 //    strcpy(id1,(data[i]->id)[k]);
 //    strcpy(id2, (data[j]->id)[l]);
-    id = strtok(item1->id[k], ".");
-    cid = strtok(item2->id[l], ".");
-cout << item1->id[1] << "           " << item2->id[1] << endl;
-    while(0 == strcmp(id, cid))
+//    id = strtok(id1, ".");
+//    cid = strtok(id2, ".");
+cout << item1->id[0] << "           " << item2->id[0] << endl;
+      ss1.str(data[i]->id[k]);
+      ss2.str(data[j]->id[l]);
+
+    while(id == cid)
     {
 cout << id << endl;
 cout << cid << endl << endl;
-      count++;
-      id = strtok(NULL, ".");
-      cid = strtok(NULL, ".");
+      id = ss1.get();
+      cid = ss2.get();
+      if(id == '.')
+        count++;
+      
     }
-    while(id[0] != '\0')
+    while((ss1.good()==true))
     {
-      jump++;
-      strtok(NULL, ".");
+      id = ss1.get();
+      if(id == '.')
+        jump++;
+      //strtok(NULL, ".");
     }
     temp = data[i];
     parentID = temp->parentID[parentID];
