@@ -46,32 +46,13 @@ Thing::Thing()
 
 Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char *prev)
 {
-if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
-  cout << "error\n";
-
-  int len;
   current = 0;
-//cout << p.ID << endl;
-  len = strlen(prev);
- /* if(0 == strncmp(prev, parent[0]->id[parent[0]->idCount], len))//Checks the last id to know which parent to go up
-  {
-    current = 0;
-  } else {
-    current = 1;
-  }*/
   switch(flag)
   {
     case '0':			//Ancestor
       
       for(int i = 0; i < level; i++)
       {
-        
-
-//Use ID to determine which parent to iterate up
-
-
-
-
         ptr = ptr->parent[ptr->current];	//Used algorithm to determine pos
       }
       parent[0] = ptr;
@@ -79,7 +60,6 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
       {
         (parent[0]->child)++;	//If its not the root node, we need to add a child to parent
       }
-//cout << "uncle\n";
       break;
     case '1':			//Sibling
       ptr = ptr->parent[current]; //Must go up 1 level to reach parent
@@ -89,12 +69,13 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
     case '2':		//Current pointer already points to parent of child
       parent[0] = ptr;
       (parent[0]->child)++;
-//cout << "Child\n";
       break;//It is a child
     case 'a':
       break;
   }
-
+  path[0] = 0;
+  if(parent[0] != NULL)
+    parentID[0] = parent[0]->idCount;
   //These copy the information we need from the given array
   strcpy(name, p.name);
   birth = p.birthYear;
@@ -119,7 +100,7 @@ if(0 == strcmp(p.name,"Alfonso Sanz y Martnez de Arrizala"))
     }
   }
 
-/*
+
 Thing *thisthing;
 thisthing = this;
 
@@ -130,7 +111,7 @@ while(thisthing != NULL)
 }
 
 cout << endl;
-*/
+
   return this;
 }
 
@@ -163,17 +144,21 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
+        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         current = 1;
+        path[idCount] = 1;
       }
     }
       break;
@@ -185,9 +170,11 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
+        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
@@ -195,8 +182,10 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         current = 1;
+        path[idCount] = 1;
       }
     }
       break;
@@ -206,21 +195,26 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
+        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
+        path[idCount] = 0;
       } else {
         current = 1;
+        path[idCount] = 1;
       }
     }
     break;
   }
+  parentID[idCount] = parent[current]->idCount;
 
   Thing *temp;
 
@@ -237,7 +231,7 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
   }
 
 
-/*
+
 Thing *thisthing;
 thisthing = this;
 
@@ -248,7 +242,7 @@ while(thisthing != NULL)
 }
 
 cout << endl;
-*/
+
   return this;
 }
 
@@ -263,7 +257,6 @@ Royals::Royals(const Person *people, int count)
   int back = 0;
   stringstream ss1, ss2;
 
-
   for(i = 0; i < count; i++) 	//Marks used tableslots
     check[i] = false;
 
@@ -275,10 +268,6 @@ Royals::Royals(const Person *people, int count)
 
   for(j = 1; j < count; j++)	//Loads the rest of the people
   {
-if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
-  cout <<" Here\n";
-
- 
     flag = 'a';		//Flag to determine what to load as
     i = Hash(people[j].name);
     ss1.str(people[j].ID);
@@ -305,10 +294,8 @@ if((strcmp(people[j].name, "Juan") == 0) && (people[j].birthYear == 1913))
       }
     }
     level = k;
-    
     id1 = ss1.get();
     id2 = ss2.get();
-
 //cout << level << "     " << prevlvl << endl;
 
     if(level  == prevlvl)
@@ -357,6 +344,66 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
     const char *descendentName2, int descendentBirthYear2,
     const char **ancestorName, int *ancestorBirthYear)
 {
+  unsigned int i, j;
+  char id1[30], id2[30];
+  i = Hash(descendentName1);//i stores decendent 1
+  j = Hash(descendentName2);//j stores decendent 2
+  while(check[i] != false)
+  {
+    if((strcmp(descendentName1, data[i]->name) == 0) && (data[i]->birth == descendentBirthYear1))
+    {  break; } else {
+      i = Hash2(descendentBirthYear1, i);
+    }
+  }
+  while(check[j] != false)
+  {
+    if((strcmp(descendentName2, data[j]->name) == 0) && (data[j]->birth == descendentBirthYear2))
+    {  break; } else {
+      j = Hash2(descendentBirthYear2, j);
+    }
+  }
+  int k, l, count, jump, a, parentID;
+  char *id, *cid;
+  k = 0;
+  l = 0;
+  Thing *temp, *current;
+  while((k <= data[i]->idCount) && (l <= data[j]->idCount))
+  {
+    count = 0;
+    jump = 0;
+    strcpy(id1,data[i]->id[k]);
+    strcpy(id2, data[j]->id[l]);
+    id = strtok(id1, ".");
+    cid = strtok(id2, ".");
+    while(0 == strcmp(id, cid))
+    {
+      count++;
+      id = strtok(NULL, ".");
+      cid = strtok(NULL, ".");
+    }
+    while(id[0] != '\0')
+    {
+      jump++;
+      strtok(NULL, ".");
+    }
+    temp = data[i];
+    parentID = temp->parentID[parentID];
+    for(a = 0; a < jump; a++)
+    {
+      temp = temp->parent[temp->path[parentID]];
+      parentID = temp->parentID[parentID];
+    }
+    if(current == NULL)
+    {
+      current = temp;
+    } else {
+      if(current->birth < temp->birth)
+        current = temp;
+    }
+
+  }
+
+cout << current->name << "          " << current->birth << endl;
 } // getAncestor()
 
 
@@ -391,10 +438,7 @@ void Royals::getDescendent(const char *ancestorName, int ancestorBirthYear,
   {
     if((strcmp(ancestorName, data[i]->name) == 0) && (data[i]->birth == ancestorBirthYear))
     {
-      //descendentName = &((data[i]->youngest)->name);
-     // descendentBirthYear = &((data[i]->youngest)->birth);
       *descendentBirthYear = (data[i]->youngest)->birth;
-//      strcpy(name, (data[i]->youngest)->name);
       *descendentName = (data[i]->youngest)->name;
       break;
     } else {
@@ -413,7 +457,6 @@ int Royals::getMarriages(const char *name, int birthYear)
 
   while(check[i] != false)
   {
-//cout << data[i]->birth << "     " << birthYear << endl;
     if((strcmp(data[i]->name, name) == 0) && (data[i]->birth == birthYear))
     {
       spouse = data[i]->spouseCount;
@@ -422,10 +465,6 @@ int Royals::getMarriages(const char *name, int birthYear)
       i = Hash2(birthYear, i);
     }
   }
-//cout << data[i].name << "          " << data[i].birth << endl;
-/*  if(check[i] != false)
-  { return data[i]->spouseCount; }
-  else { return -1; }*/
   return spouse;
 } // getMariages
 

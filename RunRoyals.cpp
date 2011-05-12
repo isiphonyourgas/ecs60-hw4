@@ -159,9 +159,14 @@ cout << questions[i].name << "      " << questions[i].birthYear << "    Decenden
 
         if(birthYear != questions[i].answerBirthYear
           || strcmp(name, questions[i].answerName) != 0)
-//          cout << "Question #" << i << " your answer: " << name << ' '
-//            << birthYear  << " correct: " << questions[i].answerName
-//            << ' ' << questions[i].answerBirthYear << endl;
+{
+          cout << "Question #" << i << " your answer: " << name << ' '
+            << birthYear  << " correct: " << questions[i].answerName
+            << ' ' << questions[i].answerBirthYear << endl;
+cout << questions[i].name << "      " << questions[i].birthYear << endl;
+cout << questions[i].name2 << "      " << questions[i].birthYear2 << "    Decendent" << endl;
+
+}
         break;
     } // switch
 

@@ -24,6 +24,8 @@ public:
   bool check;
   int child;
   int royalSpouse;
+  int path[100];
+  int parentID[100];
 };
 /*
 class Data {
