@@ -1,7 +1,7 @@
 // Author: davis
 
-#ifndef RUN_ROYALS_H
-  #define	RUN_ROYALS_H
+#ifndef PEOPLE_H
+#define	PEOPLE_H
 #include <fstream>
 using namespace std;
 
@@ -22,5 +22,5 @@ public:
 };  // class Person()
 
 
-#endif	/* RUN_ROYALS_H */
+#endif	/* PEOPLE_H */
 

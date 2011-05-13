@@ -110,49 +110,34 @@ int main(int argc, char** argv)
 
   for(int i = 0; i < questionCount; i++)
   {
-
     switch(questions[i].type)
     {
       case 'c':
         answer = royals->getChildren(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
-        {
-         cout << "Question #" << i << " your answer: " << answer 
+          cout << "Question #" << i << " your answer: " << answer 
               << " correct: " << questions[i].answer << endl;
-cout << questions[i].name << "      " << questions[i].birthYear << "    Child" << endl;
-
-}
         break;
       case 'm':
         answer = royals->getMarriages(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
-        {
           cout << "Question #" << i << " your answer: " << answer 
               << " correct: " << questions[i].answer << endl;
-cout <<  questions[i].name << "     " << questions[i].birthYear << "     Marrige" << endl;
-}
         break;
       case 's':
         answer = royals->getSiblings(questions[i].name, questions[i].birthYear);
         if(answer != questions[i].answer)
-{
           cout << "Question #" << i << " your answer: " << answer 
               << " correct: " << questions[i].answer << endl;
-cout << questions[i].name << "      " << questions[i].birthYear << "    Sibling" << endl;
-}
         break;
       case 'd':
         royals->getDescendent(questions[i].name, questions[i].birthYear,
               &name, &birthYear);
         if(birthYear != questions[i].answerBirthYear
           || strcmp(name, questions[i].answerName) != 0)
-{
           cout << "Question #" << i << " your answer: " << name << ' '
             << birthYear  << " correct: " << questions[i].answerName
             << ' ' << questions[i].answerBirthYear << endl;
-cout << questions[i].name << "      " << questions[i].birthYear << "    Decendent" << endl;
-
-}
         break;
       case 'a':
         royals->getAncestor(questions[i].name, questions[i].birthYear,
@@ -160,14 +145,9 @@ cout << questions[i].name << "      " << questions[i].birthYear << "    Decenden
 
         if(birthYear != questions[i].answerBirthYear
           || strcmp(name, questions[i].answerName) != 0)
-{
           cout << "Question #" << i << " your answer: " << name << ' '
             << birthYear  << " correct: " << questions[i].answerName
             << ' ' << questions[i].answerBirthYear << endl;
-cout << questions[i].name << "      " << questions[i].birthYear << endl;
-cout << questions[i].name2 << "      " << questions[i].birthYear2 << "    Ancestor" << endl;
-
-}
         break;
     } // switch
 
