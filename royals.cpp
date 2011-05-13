@@ -32,16 +32,9 @@ inline int Hash2(int year, unsigned int val)
 
 Thing::Thing()
 {
-  check = false;
-  spouseCount = 0;
-  birth = 0;
-  parent = new Thing*[2];
+  //check = false;
   parent[0] = NULL;
   parent[1] = NULL;
-  child = 0;
-  idCount = 0;
-  name = new char[85];
-  youngest = NULL;
   flip = false;
 }//Constrcutor
 
@@ -74,24 +67,11 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char 
     case 'a':
       break;
   }
-  path[0] = 0;
-  if(parent[0] != NULL)
-  {
-    parentID[0] = parent[0]->idCount;
-  } else {
-    parentID[0] = -1;
-  }
-  //These copy the information we need from the given array
   strcpy(name, p.name);
   birth = p.birthYear;
   spouseCount = p.spouseCount;
-  strcpy(id, p.ID);
-//idCount++;
-//cout << this->id[0] << endl;;
-
-  check = true;
+//  check = true;
   child = 0;
-  royalSpouse = 0;
 
   youngest = this;
   Thing *temp;
@@ -125,7 +105,7 @@ cout << endl;
 Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *prev)
 {
   int i;
-  strcpy(id, p.ID);
+//  strcpy(id, p.ID);
 
   switch(flag)
   {
@@ -162,11 +142,9 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-//        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
-//        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
@@ -174,10 +152,8 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-//        path[idCount] = 0;
       } else {
         current = 1;
-//        path[idCount] = 1;
       }
     }
       break;
@@ -187,26 +163,22 @@ Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *pre
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-//        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
-//        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-//        path[idCount] = 0;
       } else {
         current = 1;
-//        path[idCount] = 1;
       }
     }
     break;
   }
-  parentID[idCount] = parent[current]->idCount;
+//  parentID[idCount] = parent[current]->idCount;
 
   Thing *temp;
 
@@ -228,7 +200,7 @@ Thing *thisthing;
 thisthing = this;
 
 while(thisthing != NULL)
-{
+{:246,2
   cout << thisthing->name << " --> ";
   thisthing = thisthing->parent[thisthing->current];
 }
@@ -243,14 +215,11 @@ void Thing::mark()
 
   flip = true;
 
-//if(strcmp(this->name, "Princess Josphine de Beauharnais") == 0)
-//  cout << flip <<endl;
-
    if((parent[0] != NULL) && (parent[0]->flip != true))
     parent[0]->mark();
    if((parent[1] != NULL) && (parent[1]->flip != true))
     parent[1]->mark();
-}
+}//Marks all nodes
 
 void Thing::unmark()
 {
@@ -259,18 +228,17 @@ void Thing::unmark()
     parent[0]->unmark();
   if((parent[1] != NULL) && (parent[1]->flip != false))
     parent[1]->unmark(); 
-}
+}//Unmarks all node
 
 Thing* Thing::search()
 {
   Thing *temp1 = NULL;
   Thing *temp2 = NULL;
-  if(flip == true)
+
+  if((flip == true) && (birth != 0))// Value hit, returning
+  {
     return this;
-
-
-//if(strcmp(this->name, "Princess Josphine de Beauharnais") == 0)
-//  cout << flip  <<endl;
+  }
 
   if(parent[0] != NULL)
     temp1 = parent[0]->search();
@@ -278,6 +246,7 @@ Thing* Thing::search()
   if(parent[1] != NULL)
     temp2 = parent[1]->search();
 
+//If statements to determine which to return
   if(temp1 != NULL)
   {
     if(temp2 != NULL)
@@ -329,6 +298,9 @@ Royals::Royals(const Person *people, int count)
     prevlvl = level;
     k = 0;
     m = 0;
+
+
+//Finds level
     while(ss1.good() == true)
     {
       id1 = ss1.get();
@@ -350,38 +322,29 @@ Royals::Royals(const Person *people, int count)
     level = k;
     id1 = ss1.get();
     id2 = ss2.get();
-//cout << level << "     " << prevlvl << endl;
-
+//************************************************************
+//Flag Set
     if(level  == prevlvl)
     {
-//      cout << "sibling\n"; //sibling
       flag = '1';
     }
     if(level < prevlvl)//Ancestor
     {
-//      cout << "ancestor\n";
       back = prevlvl - level + 1;
       flag = '0';
     }
     if(level > prevlvl)
     {
-//      cout << "child\n";
       flag = '2';
     }
-    
+//*************************************************************
     while(1)
     {
       if(check[i] == true)
       {
         if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
-          temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID);
-  /*        cout << "COLLISION\n";
-cout << data[i]->parent[0]->name;
-if(data[i]->parent[1] != NULL)
-{
-cout << "           " << data[i]->parent[1]->name << endl;
-} else { cout << endl; }*/
+          temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID); //Updates any relevent info
           break;
         } else {
           i = Hash2(people[j].birthYear, i);
@@ -393,7 +356,7 @@ cout << "           " << data[i]->parent[1]->name << endl;
           break;
       }//else
     }//while
-    ss1.clear();	//Cleats the stream for next person
+    ss1.clear();	//resets stream flag for next person
     ss2.clear();
   }//for
    
@@ -407,18 +370,11 @@ void Royals::getAncestor(const char *descendentName1, int descendentBirthYear1,
 {
   unsigned int i, j;
 
-/*
-for(i = 0; i < 76980; i++)
-{
-  if(check[i] != NULL)
-  {
-    cout << data[i]->id[0] << endl;
-  }
-}*/
-
-  char id1[30], id2[30];
+//Hash function
   i = Hash(descendentName1);//i stores decendent 1
   j = Hash(descendentName2);//j stores decendent 2
+
+//Hash table find
   while(check[i] != false)
   {
     if((strcmp(descendentName1, data[i]->name) == 0) && (data[i]->birth == descendentBirthYear1))
@@ -434,7 +390,7 @@ for(i = 0; i < 76980; i++)
     }
   }
 
-//cout << data[i]->name << "       " << data[j]->name << endl;
+//Marks the anscestor nodes and searches from other item until reaches marked node
 
   Thing *item1, *item2, *current;
   current = NULL;
@@ -443,8 +399,8 @@ for(i = 0; i < 76980; i++)
   item1->mark();
   current = item2->search();
   item1->unmark();
-  
-
+//**********************************************************************
+//Checking for overlap
   if(current == item1)
   {
     if(item1->parent[0] != NULL)
@@ -462,8 +418,7 @@ for(i = 0; i < 76980; i++)
       }
     }
   }
-
-  
+//************************************************************************
   if(current == item2)
   {
     if(item2->parent[0] != NULL)
@@ -481,143 +436,31 @@ for(i = 0; i < 76980; i++)
       }
     }
   }
-
-
- /* int k, l, count, jump, a, pathway, b, len;
-  int result1[15], result2[15];
-  char *id, *cid, *totalID;
-//  char id1[30], id2[30];
-  k = 0;
-  l = 0;
-  b = 0;
-  Thing *temp, *current, *item1, *item2, *back;
-  item1 = data[i];
-  item2 = data[j];
-  stringstream ss1, ss2;
-  current = NULL;
-  for(k = 0; k < item2->idCount; k++)
+//***********************************************************************
+//Checking for birthyear = 0
+  while(current->birth == 0)
   {
-    cout << item2->id[k]<< endl;
-  }
-  cout << "\n\n\n";
-
-  for(k = 0; k < item1->idCount; k++)
-  {
-    cout << item1->id[k]<< endl;
-  }
-cout << "\n\n\n";
-
-  k = 0;
-
-  while((k < item1->idCount) && (l < item2->idCount))
-  {
-    strcpy(id1, data[i]->id[k]);
-    strcpy(id2, data[j]->id[l]);
-//cout << id1 << "      " << id2 << endl;
-//    len = strlen(id1);
-    id = strtok(id1, ".");
-    a = 0;
-//cout << id1 << "     " << id2 << endl;
-  //  for(a = 0; a < len; a++)
-    while(id != NULL)
+    if(current->parent[0] != NULL)
     {
-      result1[a] = *id - 48;
-      id = strtok(NULL, ".");
-//cout << result1[a] << ".";
-      a++;
-    }
-//cout << endl;
-    a = 0;
-    id = strtok(id2, ".");
-    while(id != NULL)
-    {
-      result2[a] = *id - 48;
-      id = strtok(NULL, ".");
-//cout << result2[a] << ".";
-      a++;
-    }
-//cout << endl;
-
-  for(b = 0; b < 15; b++)
-  {
-    if(result1[b] != result2[b])
-      break;
-  }
-  jump = a - b - 1;
-//cout << jump << endl;
-    while((ss1.good()==true))
-    {
-      id = ss1.get();
-      if(id == '.')
-        jump++;
-      //strtok(NULL, ".");
-    }
-
-//cout << "BBBBBB = " << b << endl;
-
-    if((result1[0] == result2[0]) && (jump > 0))
-    {
-      temp = data[j];
-      back = temp;
-      temp = temp->parent[temp->path[l]];
-      pathway = back->parentID[l];
-      for(a = 0; a < jump; a++)
+      if(current->parent[1] != NULL)
       {
-//cout << temp->id[pathway] << "      " << temp->name << endl;;
-        back = temp;
-        temp = temp->parent[temp->path[pathway]];
-        pathway = back->parentID[pathway];
-
-//        temp = temp->parent[temp->path[pathway]];
-      }
-if(pathway == -1)
-{
-cout << temp->id[0] << endl;
-} else {
-cout << temp->id[pathway] << endl;
-}
-      if(current == NULL)
-      {
-        current = temp;
+        if((current->parent[0]->birth > current->parent[1]->birth))
+        {
+          current = current->parent[0];
+        } else {
+          current = current->parent[1];
+        }
       } else {
-        if(current->birth < temp->birth)
-          current = temp;
+        current = current->parent[0];
       }
     }
-    ss1.clear();
-    ss2.clear();
-//cout << b + 1 << b << b -1 << endl;
-    if(result1[b + 1] > result2[b + 1])
-    {
-      l++;
-//cout << "LLLLLLLLLLLLLLL = " << l << endl;;
-    } else {
-      k++;
-//cout << "KKKKKKKKKKKKKKKK = " << k << endl;;
-    }
-//cout<< item1->idCount << "      " << item2->idCount << endl;
-  }*/
-//  if(current != NULL)
+  }
 //    cout << current->name << "          " << current->birth << endl;
 //    cout << item1->id[0] << "     " << item2->id[0] << "     " <<current->id[0] << endl;
 
   *ancestorName = current->name;
   *ancestorBirthYear = current->birth;
   
-
-/*
-unsigned int p;
-for(p = 0; p < 76980; p++)
-{
-  cout << p << endl;
-//  if(check[p] == true)
-//  {
-//    if(data[p]->flip == true)
-//      cout << data[p]->name << endl;
-//  }
-}
-*/
-
 
 } // getAncestor()
 
@@ -691,7 +534,7 @@ int Royals::getSiblings(const char *name, int birthYear)
   Thing *parent;
   i = Hash(name);
   children = 0;
-//Multiple entries are handled by inserting again so we have to add up all the children
+//Hash the values
   while(check[i] != false)
   {
     if((strcmp(name, data[i]->name) == 0) && (data[i]->birth == birthYear))

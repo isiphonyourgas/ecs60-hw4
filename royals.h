@@ -13,23 +13,17 @@ public:
   void mark();
   void unmark();
   Thing* search();
- // Thing* update(const Person p, Thing *ptr, char flag, int level);
   
-  Thing **parent, *youngest;
+  Thing *parent[2], *youngest;
   bool flip;
-  int parentC, current;
-  char *name;
+  int current;
+  char name[85];
   char **spouseName;
   int *spouseYear;
   int birth;
   int spouseCount;
-  int idCount;
   char id[30];
-  bool check;
   int child;
-  int royalSpouse;
-  int path[100];
-  int parentID[100];
 };
 /*
 class Data {
