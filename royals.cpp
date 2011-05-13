@@ -273,10 +273,13 @@ Thing* Thing::search()
 Royals::Royals(const Person *people, int count)
 {
   int i, j, level = 0;
-  int k, prevlvl, m;
+//  int k, prevlvl, m;
+  int prevlvl;
   Thing *temp = NULL;
   char flag;
-  char id1, id2;
+//  char id1, id2;
+  char id1[30];
+  char *blah;
   int back = 0;
   stringstream ss1, ss2;
 
@@ -293,15 +296,17 @@ Royals::Royals(const Person *people, int count)
   {
     flag = 'a';		//Flag to determine what to load as
     i = Hash(people[j].name);
-    ss1.str(people[j].ID);
-    ss2.str(people[j - 1].ID);
+//    ss1.str(people[j].ID);
+//    ss2.str(people[j - 1].ID);
+    strcpy(id1, people[j].ID);
+//    strcpy(id2, people[j-1].ID);
     prevlvl = level;
-    k = 0;
-    m = 0;
+//    k = 0;
+//    m = 0;
 
 
 //Finds level
-    while(ss1.good() == true)
+/*    while(ss1.good() == true)
     {
       id1 = ss1.get();
       id2 = ss2.get();
@@ -321,7 +326,15 @@ Royals::Royals(const Person *people, int count)
     }
     level = k;
     id1 = ss1.get();
-    id2 = ss2.get();
+    id2 = ss2.get();*/
+  blah = strpbrk(id1, ".");
+  level = 0;
+  while(blah != NULL)
+  {
+    blah = strpbrk(blah + 1, ".");
+    level++;
+  }
+
 //************************************************************
 //Flag Set
     if(level  == prevlvl)
