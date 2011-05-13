@@ -14,12 +14,13 @@ inline int Hash(const char *p)
   len = strlen(p);
 //  len = len / 2;
   val = 51390356;
-  for(i = 0; i < len; i++)
+  for(i = 0; i < len; i = i + 7)
   {
     val = (val ^ p[i]);
     val = val * 16777643;
   }
   val = val % 76980;
+
 
   return val;
 }//Just a Hash function I found online
