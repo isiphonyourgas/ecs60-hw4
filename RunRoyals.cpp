@@ -110,6 +110,7 @@ int main(int argc, char** argv)
 
   for(int i = 0; i < questionCount; i++)
   {
+
     switch(questions[i].type)
     {
       case 'c':

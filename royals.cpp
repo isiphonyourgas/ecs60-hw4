@@ -85,8 +85,7 @@ Thing* Thing::Load(const Person p, Thing *ptr, char flag, int level, const char 
   strcpy(name, p.name);
   birth = p.birthYear;
   spouseCount = p.spouseCount;
-  id[0] = new char[30];
-  strcpy(id[0], p.ID);
+  strcpy(id, p.ID);
 //idCount++;
 //cout << this->id[0] << endl;;
 
@@ -114,7 +113,7 @@ thisthing = this;
 
 while(thisthing != NULL)
 {
-  cout << thisthing->id[thisthing->idCount] << " --> ";
+  cout << thisthing->name << " --> ";
   thisthing = thisthing->parent[thisthing->current];
 }
 
@@ -125,12 +124,8 @@ cout << endl;
 
 Thing* Thing::update(Person p, Thing *ptr, char flag, int level, const char *prev)
 {
-  idCount++;
-  id[idCount] = new char[30];
-  strcpy(id[idCount], p.ID);
   int i;
-if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
-  cout << "here\n";
+  strcpy(id, p.ID);
 
   switch(flag)
   {
@@ -145,21 +140,17 @@ if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
-        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
       } else {
         current = 1;
-        path[idCount] = 1;
       }
     }
       break;
@@ -171,11 +162,11 @@ if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
+//        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
-        path[idCount] = 1;
+//        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
@@ -183,10 +174,10 @@ if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
+//        path[idCount] = 0;
       } else {
         current = 1;
-        path[idCount] = 1;
+//        path[idCount] = 1;
       }
     }
       break;
@@ -196,21 +187,21 @@ if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
+//        path[idCount] = 0;
       } else {
         parent[1] = ptr;
         current = 1;
-        path[idCount] = 1;
+//        path[idCount] = 1;
         (parent[1]->child)++;
       }
     } else {
       if((strcmp(parent[0]->name, ptr->name) == 0) && ((parent[0])->birth == ptr->birth))
       {
         current = 0;
-        path[idCount] = 0;
+//        path[idCount] = 0;
       } else {
         current = 1;
-        path[idCount] = 1;
+//        path[idCount] = 1;
       }
     }
     break;
@@ -231,14 +222,14 @@ if(strcmp(p.name, "Archduke Johannes  of Austria") == 0)
     }
   }
 
-
 /*
+
 Thing *thisthing;
 thisthing = this;
 
 while(thisthing != NULL)
 {
-  cout << thisthing->id[(thisthing->idCount)] << " --> ";
+  cout << thisthing->name << " --> ";
   thisthing = thisthing->parent[thisthing->current];
 }
 
@@ -249,10 +240,15 @@ cout << endl;
 
 void Thing::mark()
 {
+
   flip = true;
-  if((parent[0] != NULL) && (parent[0]->flip != true))
+
+//if(strcmp(this->name, "Princess Josphine de Beauharnais") == 0)
+//  cout << flip <<endl;
+
+   if((parent[0] != NULL) && (parent[0]->flip != true))
     parent[0]->mark();
-  if((parent[1] != NULL) && (parent[1]->flip != true))
+   if((parent[1] != NULL) && (parent[1]->flip != true))
     parent[1]->mark();
 }
 
@@ -269,8 +265,12 @@ Thing* Thing::search()
 {
   Thing *temp1 = NULL;
   Thing *temp2 = NULL;
-  if(this->flip == true)
+  if(flip == true)
     return this;
+
+
+//if(strcmp(this->name, "Princess Josphine de Beauharnais") == 0)
+//  cout << flip  <<endl;
 
   if(parent[0] != NULL)
     temp1 = parent[0]->search();
@@ -296,7 +296,7 @@ Thing* Thing::search()
     {
       return temp2;
     } else {
-      return this;
+      return NULL;
     }
   }
 }
@@ -376,6 +376,12 @@ Royals::Royals(const Person *people, int count)
         if((0 == strcmp(data[i]->name,people[j].name)) && (data[i]->birth == people[j].birthYear))
         {
           temp = data[i]->update(people[j], temp, flag, back, people[j-1].ID);
+  /*        cout << "COLLISION\n";
+cout << data[i]->parent[0]->name;
+if(data[i]->parent[1] != NULL)
+{
+cout << "           " << data[i]->parent[1]->name << endl;
+} else { cout << endl; }*/
           break;
         } else {
           i = Hash2(people[j].birthYear, i);
@@ -390,23 +396,7 @@ Royals::Royals(const Person *people, int count)
     ss1.clear();	//Cleats the stream for next person
     ss2.clear();
   }//for
-    
-/*
-for(i = 0; i < 76980; i++)
-{
-  if(check[i] != NULL)
-  {
-cout << data[i]->name << endl;
-cout << data[i]->idCount << endl;
-    for(j = 0; j <= data[i]->idCount; j++)
-    {
-      cout << data[i]->id[j] << endl;
-    }
-  }
-}
-*/
-
-
+   
 
 }  // Royals()
 
@@ -443,6 +433,9 @@ for(i = 0; i < 76980; i++)
       j = Hash2(descendentBirthYear2, j);
     }
   }
+
+//cout << data[i]->name << "       " << data[j]->name << endl;
+
   Thing *item1, *item2, *current;
   current = NULL;
   item1 = data[i];
@@ -605,8 +598,8 @@ cout << temp->id[pathway] << endl;
 //cout<< item1->idCount << "      " << item2->idCount << endl;
   }*/
 //  if(current != NULL)
-    cout << current->name << "          " << current->birth << endl;
-    cout << item1->id[0] << "     " << item2->id[0] << "     " <<current->id[0] << endl;
+//    cout << current->name << "          " << current->birth << endl;
+//    cout << item1->id[0] << "     " << item2->id[0] << "     " <<current->id[0] << endl;
 
   *ancestorName = current->name;
   *ancestorBirthYear = current->birth;
